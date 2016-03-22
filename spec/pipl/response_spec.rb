@@ -74,6 +74,8 @@ describe Pipl::Client::SearchResponse do
   it 'creates instance from json' do
     json_str = fixture('test.json').read
     response = Pipl::Client::SearchResponse.from_json json_str
+    expect(response.raw_response).to eq(json_str)
+    expect(response.parsed_json).to eq(JSON.parse json_str, symbolize_names: true)
     expect(response.query.email.address).to eq('clark.kent@example.com')
     expect(response.query.email.address_md5).to eq('2610ee49440fe757e3cc4e46e5b40819')
     expect(response.person.id).to eq('41a6a386-fa23-41e4-aa3d-9b686ee9a645')

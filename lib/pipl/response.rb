@@ -12,6 +12,9 @@ module Pipl
       attr_reader :search_id, :http_status_code, :raw_response, :available_data, :match_requirements
       attr_reader :source_category_requirements
 
+      # Added by Zenna
+      attr_reader :parsed_json
+
       def initialize(params={})
         @query = params[:query]
         @person = params[:person]
@@ -26,12 +29,14 @@ module Pipl
         @available_data = params[:available_data]
         @match_requirements = params[:match_requirements]
         @source_category_requirements = params[:source_category_requirements]
+        @parsed_json = params[:parsed_json]
       end
 
       def self.from_json(json_str)
         h = JSON.parse(json_str, symbolize_names: true)
 
         params = {}
+        params[:parsed_json] = h
         params[:query] = Pipl::Person.from_hash(h[:query]) if h.key? :query
         params[:person] = Pipl::Person.from_hash(h[:person]) if h.key? :person
         params[:sources] = h[:sources].map { |s| Pipl::Source.from_hash(s) } if h.key? :sources
